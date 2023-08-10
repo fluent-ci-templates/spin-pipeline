@@ -16,9 +16,9 @@ dagger run fluentci spin_pipeline
 
 ## Environment Variables
 
-| Variable      | Description             |
-|---------------|-------------------------|
-| SPIN_AUTH_TOKEN | Your Spin Auth Token. |
+| Variable        | Description                      |
+|-----------------|----------------------------------|
+| SPIN_AUTH_TOKEN | Your Fermyon Cloud Access Token. |
 
 ## Jobs
 
