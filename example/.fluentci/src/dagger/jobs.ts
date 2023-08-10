@@ -21,7 +21,9 @@ export const build = async (client: Client, src = ".") => {
     .withExec(["mv", "spin", "/usr/local/bin/spin"])
     .withExec(["rustup", "target", "add", "wasm32-wasi"])
     .withMountedCache("/app/target", client.cacheVolume("spin-target-cache"))
-    .withDirectory("/app", context, { exclude: ["target"] })
+    .withDirectory("/app", context, {
+      exclude: ["target", ".git", ".fluentci"],
+    })
     .withWorkdir("/app")
     .withExec(["spin", "build"]);
 
@@ -62,7 +64,9 @@ export const deploy = async (
 
   const ctr = baseCtr
     .withEnvVariable("SPIN_AUTH_TOKEN", Deno.env.get("SPIN_AUTH_TOKEN")!)
-    .withDirectory("/app", context, { exclude: ["target"] })
+    .withDirectory("/app", context, {
+      exclude: ["target", ".git", ".fluentci"],
+    })
     .withWorkdir("/app")
     .withExec(["spin", "login", "--auth-method", "token"])
     .withExec(["spin", "deploy"]);
