@@ -21,10 +21,13 @@ export const build = async (client: Client, src = ".") => {
     .withExec(["mv", "spin", "/usr/local/bin/spin"])
     .withExec(["rustup", "target", "add", "wasm32-wasi"])
     .withMountedCache(
-      "/root/.cargo/registry",
+      "/usr/local/cargo/registry",
       client.cacheVolume("cargo-cache")
     )
-    .withMountedCache("/root/.cargo/git", client.cacheVolume("cargo-git-cache"))
+    .withMountedCache(
+      "/usr/local/cargo/git",
+      client.cacheVolume("cargo-git-cache")
+    )
     .withMountedCache("/app/target", client.cacheVolume("spin-target-cache"))
     .withDirectory("/app", context, {
       exclude: ["target", ".git", ".fluentci"],
