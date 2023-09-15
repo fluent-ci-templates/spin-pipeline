@@ -5,6 +5,8 @@ export enum Job {
   deploy = "deploy",
 }
 
+export const exclude = ["target", ".git", ".fluentci"];
+
 export const build = async (client: Client, src = ".") => {
   const context = client.host().directory(src);
   const ctr = client
@@ -26,9 +28,7 @@ export const build = async (client: Client, src = ".") => {
     )
     .withMountedCache("/root/.cargo/git", client.cacheVolume("cargo-git-cache"))
     .withMountedCache("/app/target", client.cacheVolume("spin-target-cache"))
-    .withDirectory("/app", context, {
-      exclude: ["target", ".git", ".fluentci"],
-    })
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["spin", "build"]);
 
@@ -69,9 +69,7 @@ export const deploy = async (
 
   const ctr = baseCtr
     .withEnvVariable("SPIN_AUTH_TOKEN", Deno.env.get("SPIN_AUTH_TOKEN")!)
-    .withDirectory("/app", context, {
-      exclude: ["target", ".git", ".fluentci"],
-    })
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["spin", "login", "--auth-method", "token"])
     .withExec(["spin", "deploy"]);
