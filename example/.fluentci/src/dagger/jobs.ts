@@ -1,9 +1,11 @@
-import Client from "@dagger.io/dagger";
+import Client from "@fluentci.io/dagger";
 
 export enum Job {
   build = "build",
   deploy = "deploy",
 }
+
+export const exclude = ["target", ".git", ".fluentci"];
 
 export const build = async (client: Client, src = ".") => {
   const context = client.host().directory(src);
@@ -21,17 +23,12 @@ export const build = async (client: Client, src = ".") => {
     .withExec(["mv", "spin", "/usr/local/bin/spin"])
     .withExec(["rustup", "target", "add", "wasm32-wasi"])
     .withMountedCache(
-      "/usr/local/cargo/registry",
+      "/root/.cargo/registry",
       client.cacheVolume("cargo-cache")
     )
-    .withMountedCache(
-      "/usr/local/cargo/git",
-      client.cacheVolume("cargo-git-cache")
-    )
+    .withMountedCache("/root/.cargo/git", client.cacheVolume("cargo-git-cache"))
     .withMountedCache("/app/target", client.cacheVolume("spin-target-cache"))
-    .withDirectory("/app", context, {
-      exclude: ["target", ".git", ".fluentci"],
-    })
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["spin", "build"]);
 
@@ -72,9 +69,7 @@ export const deploy = async (
 
   const ctr = baseCtr
     .withEnvVariable("SPIN_AUTH_TOKEN", Deno.env.get("SPIN_AUTH_TOKEN")!)
-    .withDirectory("/app", context, {
-      exclude: ["target", ".git", ".fluentci"],
-    })
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["spin", "login", "--auth-method", "token"])
     .withExec(["spin", "deploy"]);

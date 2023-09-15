@@ -1,0 +1,16 @@
+authors = ["Tsiry Sandratraina <tsiry.sndr@fluentci.io>"]
+description = ""
+name = "hello"
+spin_manifest_version = "1"
+trigger = {type = "http", base = "/"}
+version = "0.1.0"
+
+[[component]]
+allowed_http_hosts = []
+id = "hello"
+source = "target/wasm32-wasi/release/hello.wasm"
+[component.trigger]
+route = "/..."
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]
