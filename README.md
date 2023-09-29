@@ -2,7 +2,7 @@
 
 [![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fspin_pipeline&query=%24.version)](https://pkg.fluentci.io/spin_pipeline)
 [![deno module](https://shield.deno.dev/x/spin_pipeline)](https://deno.land/x/spin_pipeline)
-![deno compatibility](https://shield.deno.dev/deno/^1.34)
+![deno compatibility](https://shield.deno.dev/deno/^1.37)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/spin-pipeline)](https://codecov.io/gh/fluent-ci-templates/spin-pipeline)
 
 A ready-to-use CI/CD Pipeline for building and deploying your [Spin](https://www.fermyon.com/spin) applications to [Fermyon Platform](https://www.fermyon.com/platform).
@@ -12,7 +12,7 @@ A ready-to-use CI/CD Pipeline for building and deploying your [Spin](https://www
 Run the following command:
 
 ```bash
-dagger run fluentci spin_pipeline
+fluentci run spin_pipeline
 ```
 
 ## Environment Variables
@@ -34,7 +34,7 @@ You can also use this pipeline programmatically:
 
 ```typescript
 import Client, { connect } from "https://sdk.fluentci.io/v0.1.9/mod.ts";
-import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.5.1/mod.ts";
+import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.5.2/mod.ts";
 
 function pipeline(src = ".") {
   connect(async (client: Client) => {
