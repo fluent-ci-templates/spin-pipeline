@@ -1,0 +1,10 @@
+{
+  shuttle {
+    deploy(
+      src: "."
+      cachePath: "/app/target"
+      cacheKey: "spin-target-cache"
+      authToken: "SPIN_AUTH_TOKEN"
+    )
+  }
+}
