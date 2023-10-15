@@ -1,5 +1,5 @@
 {
-  shuttle {
+  spin {
     build(src: ".")
   }
 }

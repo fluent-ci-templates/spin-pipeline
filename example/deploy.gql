@@ -1,5 +1,5 @@
 {
-  shuttle {
+  spin {
     deploy(
       src: "."
       cachePath: "/app/target"
