@@ -16,13 +16,7 @@ jobs:
           curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.8.8 sh
           sudo mv bin/dagger /usr/local/bin
           dagger version
-      - name: Setup Spin Auth Token
-        run: |
-          sed -i "s/SPIN_AUTH_TOKEN/$SPIN_AUTH_TOKEN/g" example/deploy.gql
-        env:
-          SPIN_AUTH_TOKEN: ${{ secrets.SPIN_AUTH_TOKEN }}
       - name: Run Dagger Pipelines
         run: |
-          dagger query --doc build.gql
           dagger query --doc deploy.gql
         working-directory: example
