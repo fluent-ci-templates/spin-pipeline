@@ -34,7 +34,7 @@ export function generateYaml(): Workflow {
       },
       {
         name: "Run Dagger Pipelines",
-        run: "dagger run fluentci spin_pipeline build deploy",
+        run: "fluentci run spin_pipeline build deploy",
         env: {
           SPIN_AUTH_TOKEN: "${{ secrets.SPIN_AUTH_TOKEN }}",
         },

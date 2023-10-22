@@ -1,12 +1,14 @@
-const command = new Deno.Command(Deno.execPath(), {
-  args: [
-    "run",
-    "-A",
-    "--import-map=https://deno.land/x/spin_pipeline/import_map.json",
-    "https://deno.land/x/spin_pipeline/src/dagger/runner.ts",
-  ],
-});
+import Client, { connect } from "https://sdk.fluentci.io/v0.1.9/mod.ts";
+import {
+  build,
+  deploy,
+} from "https://pkg.fluentci.io/spin_pipeline@v0.5.2/mod.ts";
 
-const { stdout } = await command.output();
+function pipeline(src = ".") {
+  connect(async (client: Client) => {
+    await build(client, src);
+    await deploy(client, src);
+  });
+}
 
-console.log(new TextDecoder().decode(stdout));
+pipeline();

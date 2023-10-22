@@ -31,7 +31,7 @@ dagger version`,
       {
         run: {
           name: "Run Dagger Pipelines",
-          command: "dagger run fluentci spin_pipeline",
+          command: "fluentci run spin_pipeline",
         },
       },
     ]);
