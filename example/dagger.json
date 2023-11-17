@@ -1,5 +1,5 @@
 {
   "root": "",
   "name": "spin",
-  "sdkRuntime": "tsiry/dagger-sdk-deno"
+  "sdk": "github.com/fluentci-io/daggerverse/deno-sdk@main"
 }
