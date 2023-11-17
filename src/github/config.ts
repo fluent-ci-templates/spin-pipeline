@@ -7,11 +7,6 @@ export function generateYaml(): Workflow {
     branches: ["main"],
   };
 
-  const setupDagger = `\
-  curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.8.1 sh
-  sudo mv bin/dagger /usr/local/bin
-  dagger version`;
-
   const deploy: JobSpec = {
     "runs-on": "ubuntu-latest",
     steps: [
