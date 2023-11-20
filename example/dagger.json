@@ -1,5 +1,4 @@
 {
-  "root": "",
   "name": "spin",
   "sdk": "github.com/fluentci-io/daggerverse/deno-sdk@main"
 }

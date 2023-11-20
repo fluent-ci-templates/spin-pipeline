@@ -9,8 +9,8 @@ export const build = gql`
 export const deploy = gql`
   query deploy(
     $src: String!
-    $cachePath: String!
-    $cacheKey: String!
+    $cachePath: String
+    $cacheKey: String
     $authToken: String!
   ) {
     deploy(

@@ -62,8 +62,8 @@ export interface NexusGenArgTypes {
     }
     deploy: { // args
       authToken: string; // String!
-      cacheKey: string; // String!
-      cachePath: string; // String!
+      cacheKey?: string | null; // String
+      cachePath?: string | null; // String
       src: string; // String!
     }
   }

@@ -1,4 +1,6 @@
-import Client, { connect } from "../../deps.ts";
+import Client from "../../deps.ts";
+import { connect } from "../../sdk/connect.ts";
+import { getDirectory } from "./lib.ts";
 
 export enum Job {
   build = "build",
@@ -9,7 +11,7 @@ export const exclude = ["target", ".git", ".fluentci"];
 
 export const build = async (src = ".") => {
   await connect(async (client: Client) => {
-    const context = client.host().directory(src);
+    const context = getDirectory(client, src);
     const ctr = client
       .pipeline(Job.build)
       .container()
@@ -66,7 +68,7 @@ export const deploy = async (
   }
 
   await connect(async (client: Client) => {
-    const context = client.host().directory(src);
+    const context = getDirectory(client, src);
     let baseCtr = client
       .pipeline(Job.deploy)
       .container()

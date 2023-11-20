@@ -21,20 +21,32 @@ const Query = queryType({
     t.string("deploy", {
       args: {
         src: nonNull(stringArg()),
-        cachePath: nonNull(stringArg()),
-        cacheKey: nonNull(stringArg()),
+        cachePath: stringArg(),
+        cacheKey: stringArg(),
         authToken: nonNull(stringArg()),
       },
       resolve: async (_root, args, _ctx) =>
-        await deploy(args.src, args.cachePath, args.cacheKey, args.authToken),
+        await deploy(
+          args.src,
+          args.cachePath || undefined,
+          args.cacheKey || undefined,
+          args.authToken
+        ),
     });
   },
 });
 
-export const schema = makeSchema({
+const schema = makeSchema({
   types: [Query],
   outputs: {
     schema: resolve(join(dirname(".."), dirname(".."), "schema.graphql")),
     typegen: resolve(join(dirname(".."), dirname(".."), "gen", "nexus.ts")),
   },
 });
+
+schema.description = JSON.stringify({
+  "build.src": "directory",
+  "deploy.src": "directory",
+});
+
+export { schema };

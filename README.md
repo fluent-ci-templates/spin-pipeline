@@ -33,8 +33,8 @@ build(src: String!): String
 
 deploy(
   authToken: String!, 
-  cacheKey: String!, 
-  cachePath: String!, 
+  cacheKey: String, 
+  cachePath: String, 
   src: String!
 ): String
 
