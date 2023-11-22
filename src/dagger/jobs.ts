@@ -1,6 +1,6 @@
-import Client from "../../deps.ts";
+import Client, { Secret } from "../../deps.ts";
 import { connect } from "../../sdk/connect.ts";
-import { getDirectory } from "./lib.ts";
+import { getDirectory, getSpinAuthToken } from "./lib.ts";
 
 export enum Job {
   build = "build",
@@ -49,13 +49,8 @@ export const deploy = async (
   src = ".",
   cachePath = "/app/target",
   cacheKey = "spin-target-cache",
-  authToken?: string
+  authToken?: string | Secret
 ) => {
-  if (!Deno.env.get("SPIN_AUTH_TOKEN") && !authToken) {
-    console.error("SPIN_AUTH_TOKEN is not set");
-    Deno.exit(1);
-  }
-
   const cache = [
     {
       path: cachePath,
@@ -63,12 +58,15 @@ export const deploy = async (
     },
   ];
 
-  if (authToken) {
-    Deno.env.set("SPIN_AUTH_TOKEN", authToken);
-  }
-
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
+    const secret = getSpinAuthToken(client, authToken);
+
+    if (!secret) {
+      console.error("SPIN_AUTH_TOKEN is not set");
+      Deno.exit(1);
+    }
+
     let baseCtr = client
       .pipeline(Job.deploy)
       .container()
@@ -88,7 +86,7 @@ export const deploy = async (
     }
 
     const ctr = baseCtr
-      .withEnvVariable("SPIN_AUTH_TOKEN", Deno.env.get("SPIN_AUTH_TOKEN")!)
+      .withSecretVariable("SPIN_AUTH_TOKEN", secret)
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
       .withExec(["spin", "login", "--auth-method", "token"])
