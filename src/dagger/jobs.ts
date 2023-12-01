@@ -61,7 +61,7 @@ export async function build(src: string | Directory = "."): Promise<string> {
  * @returns {string}
  */
 export async function deploy(
-  src = ".",
+  src: string | Directory | undefined = ".",
   cachePath = "/app/target",
   cacheKey = "spin-target-cache",
   authToken?: string | Secret
