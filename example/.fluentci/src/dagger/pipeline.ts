@@ -12,7 +12,7 @@ export default async function pipeline(src = ".", args: string[] = []) {
     return;
   }
   await build(src);
-  await deploy(src);
+  await deploy(src, Deno.env.get("SPIN_AUTH_TOKEN")!);
 }
 
 async function runSpecificJobs(args: jobs.Job[]) {
@@ -21,6 +21,6 @@ async function runSpecificJobs(args: jobs.Job[]) {
     if (!job) {
       throw new Error(`Job ${name} not found`);
     }
-    await job();
+    await job(".", Deno.env.get("SPIN_AUTH_TOKEN")!);
   }
 }
