@@ -15,7 +15,10 @@ export const exclude = ["target", ".git", ".fluentci"];
  * @param {string | Directory | undefined} src
  * @returns {string}
  */
-export async function build(src: string | Directory = "."): Promise<string> {
+export async function build(
+  src: string | Directory = "."
+): Promise<Directory | string> {
+  let id = "";
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const ctr = client
@@ -42,13 +45,15 @@ export async function build(src: string | Directory = "."): Promise<string> {
       .withMountedCache("/app/target", client.cacheVolume("spin-target-cache"))
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
-      .withExec(["spin", "build"]);
+      .withExec(["spin", "build"])
+      .withExec(["cp", "-r", "/app/target/wasm32-wasi", "/wasm32-wasi"]);
 
-    const result = await ctr.stdout();
+    await ctr.stdout();
+    const dir = await ctr.directory("/wasm32-wasi");
 
-    console.log(result);
+    id = await dir.id();
   });
-  return "done";
+  return id;
 }
 
 /**
@@ -61,7 +66,7 @@ export async function build(src: string | Directory = "."): Promise<string> {
  * @returns {string}
  */
 export async function deploy(
-  src = ".",
+  src: string | Directory | undefined = ".",
   cachePath = "/app/target",
   cacheKey = "spin-target-cache",
   authToken?: string | Secret
@@ -105,6 +110,8 @@ export async function deploy(
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
       .withExec(["spin", "login", "--auth-method", "token"])
+      .withExec(["ls", "-la", "/app"])
+      .withExec(["ls", "-la", "/app/target"])
       .withExec(["spin", "deploy"]);
 
     const result = await ctr.stdout();
@@ -118,7 +125,7 @@ export async function deploy(
 export type JobExec = (
   src?: string
 ) =>
-  | Promise<string>
+  | Promise<Directory | string>
   | ((src?: string, cachePath?: string, cacheKey?: string) => Promise<string>);
 
 export const runnableJobs: Record<Job, JobExec> = {
