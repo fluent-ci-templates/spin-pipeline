@@ -1,4 +1,4 @@
-import Client, { Secret } from "../../deps.ts";
+import Client, { Directory, Secret } from "../../deps.ts";
 import { connect } from "../../sdk/connect.ts";
 import { getDirectory, getSpinAuthToken } from "./lib.ts";
 
@@ -9,7 +9,13 @@ export enum Job {
 
 export const exclude = ["target", ".git", ".fluentci"];
 
-export const build = async (src = ".") => {
+/**
+ * @function
+ * @description Build your application (only Rust is supported at the moment)
+ * @param {string | Directory | undefined} src
+ * @returns {string}
+ */
+export async function build(src: string | Directory = "."): Promise<string> {
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const ctr = client
@@ -43,14 +49,23 @@ export const build = async (src = ".") => {
     console.log(result);
   });
   return "done";
-};
+}
 
-export const deploy = async (
+/**
+ * @function
+ * @description Package and upload your application to the Fermyon Cloud
+ * @param {string | Directory | undefined} src
+ * @param {string} cachePath
+ * @param {string} cacheKey
+ * @param {string | Secret} authToken
+ * @returns {string}
+ */
+export async function deploy(
   src = ".",
   cachePath = "/app/target",
   cacheKey = "spin-target-cache",
   authToken?: string | Secret
-) => {
+): Promise<string> {
   const cache = [
     {
       path: cachePath,
@@ -98,7 +113,7 @@ export const deploy = async (
   });
 
   return "done";
-};
+}
 
 export type JobExec = (
   src?: string
