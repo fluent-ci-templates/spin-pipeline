@@ -1,5 +1,7 @@
 {
   spin {
-    build(src: ".")
+    build(src: ".") {
+      id
+    }
   }
 }
