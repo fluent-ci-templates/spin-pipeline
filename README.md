@@ -36,24 +36,26 @@ dagger mod install github.com/fluent-ci-templates/spin-pipeline@mod
 | build   | Build your Spin application (Only Rust is supported at the moment). |
 | deploy  | Deploy your Spin application to Fermyon Platform.                   |
 
-```graphql
-build(src: String!): String
+```typescript
+build(
+  src: string | Directory
+): Promise<Directory | string>
 
 deploy(
-  authToken: String!, 
-  cacheKey: String, 
-  cachePath: String, 
-  src: String!
-): String
-
+  src: string | Directory,
+  authToken: string | Secret,
+  cachePath = "/app/target",
+  cacheKey = "spin-target-cache"
+): Promise<string>
 ```
+
 ## Programmatic usage
 
 You can also use this pipeline programmatically:
 
 ```typescript
-import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.7.0/mod.ts";
+import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.8.0/mod.ts";
 
 await build();
-await deploy();
+await deploy(".", Deno.env.get("SPIN_AUTH_TOKEN")!);
 ```
