@@ -21,7 +21,10 @@ export const getDirectory = async (
   return src instanceof Directory ? src : client.host().directory(src);
 };
 
-export const getSpinAuthToken = (client: Client, token?: string | Secret) => {
+export const getSpinAuthToken = async (
+  client: Client,
+  token?: string | Secret
+) => {
   if (Deno.env.get("SPIN_AUTH_TOKEN")) {
     return client.setSecret(
       "SPIN_AUTH_TOKEN",
@@ -29,10 +32,13 @@ export const getSpinAuthToken = (client: Client, token?: string | Secret) => {
     );
   }
   if (token && typeof token === "string") {
-    if (token.startsWith("core.Secret")) {
-      return client.loadSecretFromID(token as SecretID);
+    try {
+      const secret = client.loadSecretFromID(token as SecretID);
+      await secret.id();
+      return secret;
+    } catch (_) {
+      return client.setSecret("SPIN_AUTH_TOKEN", token);
     }
-    return client.setSecret("SPIN_AUTH_TOKEN", token);
   }
   if (token && token instanceof Secret) {
     return token;
