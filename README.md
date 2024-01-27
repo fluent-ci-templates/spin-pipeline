@@ -44,8 +44,6 @@ build(
 deploy(
   src: string | Directory,
   authToken: string | Secret,
-  cachePath = "/app/target",
-  cacheKey = "spin-target-cache"
 ): Promise<string>
 ```
 
