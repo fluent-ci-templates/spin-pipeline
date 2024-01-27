@@ -52,7 +52,7 @@ deploy(
 You can also use this pipeline programmatically:
 
 ```typescript
-import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.8.1/mod.ts";
+import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.8.2/mod.ts";
 
 await build();
 await deploy(".", Deno.env.get("SPIN_AUTH_TOKEN")!);
