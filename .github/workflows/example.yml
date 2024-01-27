@@ -20,11 +20,13 @@ jobs:
         run: deno install -A -r https://cli.fluentci.io -n fluentci
       - name: Setup Dagger
         run: |
-          curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.3 sh
+          curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.7 sh
           sudo mv bin/dagger /usr/local/bin
           dagger version
       - name: Run Dagger Pipelines
-        run: dagger run deno run -A ../src/dagger/runner.ts
+        run: |
+          dagger run deno run -A ../src/dagger/runner.ts build
+          dagger run deno run -A ../src/dagger/runner.ts deploy
         working-directory: example
         env:
           SPIN_AUTH_TOKEN: ${{ secrets.SPIN_AUTH_TOKEN }}
