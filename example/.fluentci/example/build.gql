@@ -1,5 +1,0 @@
-{
-  shuttle {
-    build(src: ".")
-  }
-}

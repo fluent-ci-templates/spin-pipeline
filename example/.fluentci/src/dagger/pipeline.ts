@@ -1,5 +1,4 @@
 import * as jobs from "./jobs.ts";
-import { dag } from "../../deps.ts";
 
 const { build, deploy, runnableJobs } = jobs;
 

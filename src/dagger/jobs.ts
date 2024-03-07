@@ -17,7 +17,7 @@ export const exclude = ["target", ".git", ".fluentci"];
 export async function build(
   src: string | Directory
 ): Promise<Directory | string> {
-  const context = await getDirectory(dag, src);
+  const context = await getDirectory(src);
   const ctr = dag
     .pipeline(Job.build)
     .container()
@@ -59,8 +59,8 @@ export async function deploy(
   src: string | Directory,
   authToken: string | Secret
 ): Promise<string> {
-  const context = await getDirectory(dag, src);
-  const secret = await getSpinAuthToken(dag, authToken);
+  const context = await getDirectory(src);
+  const secret = await getSpinAuthToken(authToken);
 
   if (!secret) {
     console.error("SPIN_AUTH_TOKEN is not set");

@@ -17,11 +17,11 @@ export const exclude = ["target", ".git", ".fluentci"];
 export async function build(
   src: string | Directory
 ): Promise<Directory | string> {
-  const context = await getDirectory(dag, src);
+  const context = await getDirectory(src);
   const ctr = dag
     .pipeline(Job.build)
     .container()
-    .from("rust:1.75-bookworm")
+    .from("rust:1.72-bookworm")
     .withExec(["apt", "update"])
     .withExec(["apt", "install", "-y", "curl"])
     .withExec([
@@ -59,8 +59,8 @@ export async function deploy(
   src: string | Directory,
   authToken: string | Secret
 ): Promise<string> {
-  const context = await getDirectory(dag, src);
-  const secret = await getSpinAuthToken(dag, authToken);
+  const context = await getDirectory(src);
+  const secret = await getSpinAuthToken(authToken);
 
   if (!secret) {
     console.error("SPIN_AUTH_TOKEN is not set");
@@ -70,7 +70,7 @@ export async function deploy(
   const baseCtr = dag
     .pipeline(Job.deploy)
     .container()
-    .from("rust:1.75-bookworm")
+    .from("rust:1.72-bookworm")
     .withExec(["apt", "update"])
     .withExec(["apt", "install", "-y", "curl"])
     .withExec([
@@ -88,7 +88,6 @@ export async function deploy(
     .withExec(["spin", "login", "--auth-method", "token"])
     .withExec(["ls", "-la", "/app"])
     .withExec(["ls", "-la", "/app/target"])
-    .withExec(["ls", "-la", "/app/target/wasm32-wasi"])
     .withExec(["spin", "deploy"]);
 
   const result = await ctr.stdout();

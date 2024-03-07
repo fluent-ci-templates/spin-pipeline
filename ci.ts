@@ -1,7 +1,7 @@
 import {
   build,
   deploy,
-} from "https://pkg.fluentci.io/spin_pipeline@v0.8.2/mod.ts";
+} from "jsr:@fluentci/spin";
 
 await build();
 await deploy();

@@ -3,7 +3,11 @@
 [![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fspin_pipeline&query=%24.version)](https://pkg.fluentci.io/spin_pipeline)
 [![deno module](https://shield.deno.dev/x/spin_pipeline)](https://deno.land/x/spin_pipeline)
 ![deno compatibility](https://shield.deno.dev/deno/^1.37)
+[![dagger-min-version](https://img.shields.io/badge/dagger-v0.10.0-blue?color=3D66FF&labelColor=000000)](https://dagger.io)
+[![](https://jsr.io/badges/@fluentci/spin)](https://jsr.io/@fluentci/spin)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/spin-pipeline)](https://codecov.io/gh/fluent-ci-templates/spin-pipeline)
+[![ci](https://github.com/fluent-ci-templates/spin-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/fluent-ci-templates/spin-pipeline/actions/workflows/ci.yml)
+
 
 A ready-to-use CI/CD Pipeline for building and deploying your [Spin](https://www.fermyon.com/spin) applications to [Fermyon Platform](https://www.fermyon.com/platform).
 
@@ -15,21 +19,28 @@ Run the following command:
 fluentci run spin_pipeline
 ```
 
-## Dagger Module
+## 🧩 Dagger Module
 
 Use as a [Dagger](https://dagger.io) Module:
 
 ```bash
-dagger mod install github.com/fluent-ci-templates/spin-pipeline@mod
+dagger install github.com/fluent-ci-templates/spin-pipeline@main
 ```
 
-## Environment Variables
+Call a function from the module:
+
+```bash
+dagger call build --src .
+dagger call deploy --src . --auth-token SPIN_AUTH_TOKEN
+```
+
+## 🛠️ Environment Variables
 
 | Variable        | Description                      |
 |-----------------|----------------------------------|
 | SPIN_AUTH_TOKEN | Your Fermyon Cloud Access Token. |
 
-## Jobs
+## ✨ Jobs
 
 | Job     | Description                                                         |
 |---------|---------------------------------------------------------------------|
@@ -47,12 +58,12 @@ deploy(
 ): Promise<string>
 ```
 
-## Programmatic usage
+## 👨‍💻 Programmatic usage
 
 You can also use this pipeline programmatically:
 
 ```typescript
-import { build, deploy } from "https://pkg.fluentci.io/spin_pipeline@v0.8.2/mod.ts";
+import { build, deploy } from "jsr:@fluentci/spin";
 
 await build();
 await deploy(".", Deno.env.get("SPIN_AUTH_TOKEN")!);
