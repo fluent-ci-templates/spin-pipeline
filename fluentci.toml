@@ -1,0 +1,8 @@
+[package]
+authors = [
+  "Tsiry Sandratraina <tsiry.sndr@fluentci.io>",
+]
+description = "CI/CD Plugin for Spin"
+license = "MIT"
+name = "spin"
+version = "0.10.0"
